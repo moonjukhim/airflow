@@ -34,12 +34,12 @@ with DAG(
     schedule=None,
     catchup=False,
     tags=["exercise", "ch02"],
-):
+): 
     check_env = BashOperator(
         task_id="check_environment",
         bash_command=(
             'echo "=== Airflow 환경 정보 ===" && '
-            "airflow version && "
+            'echo "Airflow: $(python -c "import airflow; print(airflow.__version__)")" && ' 
             'echo "Python: $(python --version)" && '
             'echo "작업 디렉토리: $(pwd)" && '
             'echo "DAG 폴더: $AIRFLOW_HOME/dags"'
