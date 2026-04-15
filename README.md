@@ -3,33 +3,45 @@
 
 
 ---
+### Docker 설치
 
-1. Docker 설치
+1. 기존 Docker 제거
 
-# Add Docker's official GPG key:
-sudo apt update
-sudo apt install ca-certificates curl
-sudo install -m 0755 -d /etc/apt/keyrings
-sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-sudo chmod a+r /etc/apt/keyrings/docker.asc
+sudo apt-get remove docker docker-engine docker.io containerd runc
 
-# Add the repository to Apt sources:
-sudo tee /etc/apt/sources.list.d/docker.sources <<EOF
-Types: deb
-URIs: https://download.docker.com/linux/ubuntu
-Suites: $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}")
-Components: stable
-Architectures: $(dpkg --print-architecture)
-Signed-By: /etc/apt/keyrings/docker.asc
-EOF
+2. 패키지 업데이트
 
-sudo apt update
+sudo apt-get update
 
+3. 필수 패키지 설치
 
-sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo apt-get install apt-transport-https ca-certificates curl software-properties-common
 
+4. Docker 공식 GPG 키 추카
 
-sudo systemctl status docker
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | \
+sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+
+5. Docker 저장소 추가
+
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | \
+sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+6. 다시 패키지 업데이트
+
+sudo apt-get update
+
+7. Docker 및 관련 패키지 설치
+
+sudo apt-get install docker-ce docker-ce-cli containerd.io
+
+8. Docker 설치 확인
+
+sudo docker --version
+
+9. Docker 서비스 시작
+
+sudo systemctl start docker
 
 
 ---
