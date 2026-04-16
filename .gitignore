@@ -2,3 +2,6 @@ tmp
 tmp/
 
 .env
+
+compose.yaml
+compose.override.yaml
