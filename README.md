@@ -1,26 +1,54 @@
-# airflow
+# Airflow
+
+### SSH 설정
+
+```bash
+sudo apt install openssh-server -y
+```
+
+```bash
+sudo systemctl status ssh
+```
+
+3. 방화벽 조정
+
+```bash
+sudo ufw allow 22
+```
+
+4. 방화벽 확인
+
+```bash
+sudo ufw status
+```
 
 
-
----
 ### Docker 설치
 
 1. 기존 Docker 제거
 
-sudo apt-get remove docker docker-engine docker.io containerd runc
+    ```bash
+    sudo apt-get remove docker docker-engine docker.io containerd runc
+    ```
 
 2. 패키지 업데이트
 
-sudo apt-get update
+    ```bash
+    sudo apt-get update
+    ```
 
 3. 필수 패키지 설치
 
-sudo apt-get install apt-transport-https ca-certificates curl software-properties-common
+    ```bash
+    sudo apt-get install apt-transport-https ca-certificates curl software-properties-common
+    ```
 
 4. Docker 공식 GPG 키 추카
 
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | \
-sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+    ```bash
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | \
+    sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+    ```
 
 5. Docker 저장소 추가
 
