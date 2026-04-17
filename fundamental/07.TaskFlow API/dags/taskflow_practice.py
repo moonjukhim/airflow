@@ -2,7 +2,7 @@
 차시 7: TaskFlow API
 - @task 데코레이터: XCom 자동 push/pull
 - 기존 Operator와 혼합 사용
-- ETL 패턴 (extract → load → transform) 실전 예제
+- ETL 패턴 (extract → load → transform) 예제
 """
 
 import random
