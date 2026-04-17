@@ -3,6 +3,7 @@
 - return 자동 push (key='return_value')
 - 명시적 xcom_push / xcom_pull (커스텀 key)
 - 딕셔너리 전달 및 여러 Task의 XCom 조합
+- XComArgs: TaskFlow API 스타일의 암묵적 XCom 전달
 - XCom 크기 제한 주의 (메타데이터 DB에 저장됨)
 """
 
@@ -12,7 +13,7 @@ from datetime import datetime
 
 import pendulum
 from airflow.providers.standard.operators.python import PythonOperator
-from airflow.sdk import DAG
+from airflow.sdk import DAG, task
 
 
 # === 방법 1: return 자동 push ===
@@ -77,3 +78,45 @@ with DAG(
     )
 
     [extract, metrics] >> report
+
+    # === 방법 4: XComArgs (TaskFlow API) ===
+    # @task 데코레이터가 반환값을 XCom에 자동 push하고,
+    # 함수 호출 결과(XComArg)를 다른 task의 인자로 넘기면
+    # Airflow가 의존성과 xcom_pull을 자동으로 처리한다.
+    @task
+    def fetch_prices() -> dict:
+        prices = {"AAPL": 190.5, "GOOG": 142.3, "MSFT": 415.2}
+        print(f"가격 조회: {prices}")
+        return prices
+
+    @task
+    def fetch_volumes() -> dict:
+        volumes = {"AAPL": 52_000_000, "GOOG": 18_000_000, "MSFT": 22_000_000}
+        print(f"거래량 조회: {volumes}")
+        return volumes
+
+    @task
+    def compute_market_cap(prices: dict, volumes: dict) -> dict:
+        # XComArg가 실제 값(dict)으로 해제되어 전달된다.
+        caps = {sym: prices[sym] * volumes[sym] for sym in prices}
+        print(f"시가총액 계산: {caps}")
+        return caps
+
+    @task
+    def summarize(caps: dict, top_symbol: str) -> None:
+        # XComArg 인덱싱: caps["AAPL"] 처럼 dict key 접근도 지원된다.
+        print(f"최대 종목: {top_symbol} / 전체: {caps}")
+
+    prices_xarg = fetch_prices()
+    volumes_xarg = fetch_volumes()
+    caps_xarg = compute_market_cap(prices_xarg, volumes_xarg)
+
+    # XComArg 인덱싱 예시 — caps_xarg["AAPL"] 자체도 XComArg
+    summarize(caps_xarg, top_symbol=caps_xarg["AAPL"])
+
+    # 전통 Operator와 혼합: classic operator의 .output 속성도 XComArg
+    @task
+    def count_orders(orders: list) -> int:
+        return len(orders)
+
+    count_orders(extract.output)
