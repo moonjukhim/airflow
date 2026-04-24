@@ -1,0 +1,49 @@
+[2026-04-24 19:27:09] INFO - DAG bundles loaded: dags-folder
+[2026-04-24 19:27:09] INFO - Filling up the DagBag from /usr/local/airflow/dags/timezone_practice.py
+[2026-04-24 19:27:09] INFO - Stats instance was created in PID 7 but accessed in PID 47. Re-initializing.
+[2026-04-24 19:27:09] INFO - TaskInstance Details:  dag_id=09_timezone_practice task_id=show_timezone_trap dagrun_id=manual__2026-04-24T10:27:02.532689+00:00 map_index=-1 run_start_date=2026-04-24T10:27:03.465294Z try_number=1 op_classpath=["airflow.providers.standard.operators.python.PythonOperator","airflow.providers.common.compat.standard.operators.BaseAsyncOperator"]
+[2026-04-24 19:27:09] INFO - ============================================================
+[2026-04-24 19:27:09] INFO - 1) logical_date (= data_interval_start)
+[2026-04-24 19:27:09] INFO - Done. Returned value was: None
+[2026-04-24 19:27:09] INFO -    UTC : 2026-04-24 10:27:00+00:00
+[2026-04-24 19:27:09] INFO -    KST : 2026-04-24 19:27:00+09:00
+[2026-04-24 19:27:10] INFO - 
+[2026-04-24 19:27:10] INFO - 2) data_interval
+[2026-04-24 19:27:10] INFO -    start: 2026-04-24 10:27:00+00:00
+[2026-04-24 19:27:10] INFO -    end  : 2026-04-24 10:27:00+00:00
+[2026-04-24 19:27:10] INFO - 
+[2026-04-24 19:27:10] INFO - 3) 실제 실행 시각 (지금)
+[2026-04-24 19:27:10] INFO -    UTC : 2026-04-24 10:27:09
+[2026-04-24 19:27:10] INFO - 
+[2026-04-24 19:27:10] INFO - ============================================================
+[2026-04-24 19:27:10] INFO - [흔한 실수 패턴]
+[2026-04-24 19:27:10] INFO - 
+[2026-04-24 19:27:10] INFO - 실수 1: logical_date를 '실행 시각'으로 착각
+[2026-04-24 19:27:10] INFO -   → logical_date는 '처리할 데이터 구간의 시작'입니다.
+[2026-04-24 19:27:10] INFO -   → @daily DAG: 1/2에 실행되면 logical_date는 1/1
+[2026-04-24 19:27:10] INFO - 
+[2026-04-24 19:27:10] INFO - 실수 2: KST 기준으로 스케줄을 설정
+[2026-04-24 19:27:10] INFO -   → schedule='0 9 * * *' 은 UTC 09:00 = KST 18:00
+[2026-04-24 19:27:10] INFO -   → KST 09:00에 실행하려면 schedule='0 0 * * *' (UTC 00:00)
+[2026-04-24 19:27:10] INFO - 
+[2026-04-24 19:27:10] INFO - 실수 3: datetime.now()로 날짜 필터링
+[2026-04-24 19:27:10] INFO -   → 항상 context의 logical_date를 사용하세요.
+[2026-04-24 19:27:10] INFO -   → 재실행/백필 시 datetime.now()는 잘못된 날짜를 반환합니다.
+
+---
+
+[2026-04-24 19:27:12] INFO - DAG bundles loaded: dags-folder
+[2026-04-24 19:27:12] INFO - Filling up the DagBag from /usr/local/airflow/dags/timezone_practice.py
+[2026-04-24 19:27:12] INFO - Stats instance was created in PID 7 but accessed in PID 50. Re-initializing.
+[2026-04-24 19:27:12] INFO - TaskInstance Details:  dag_id=09_timezone_practice task_id=safe_date_usage dagrun_id=scheduled__2026-04-24T06:00:00+00:00 map_index=-1 run_start_date=2026-04-24T10:27:12.211472Z try_number=1 op_classpath=["airflow.providers.standard.operators.python.PythonOperator","airflow.providers.common.compat.standard.operators.BaseAsyncOperator"]
+[2026-04-24 19:27:12] INFO - === 올바른 날짜 사용 ===
+[2026-04-24 19:27:12] INFO - SQL WHERE: date = '2026-04-24'
+[2026-04-24 19:27:12] INFO - 파일 경로: /data/2026-04-24/events.csv
+[2026-04-24 19:27:12] INFO - KST 기준 날짜가 필요하면: 2026-04-24
+[2026-04-24 19:27:12] INFO - 
+[2026-04-24 19:27:12] INFO - Jinja 템플릿에서:
+[2026-04-24 19:27:12] INFO -   {{ ds }}                    → YYYY-MM-DD (UTC)
+[2026-04-24 19:27:12] INFO -   {{ logical_date }}          → 전체 datetime 객체
+[2026-04-24 19:27:12] INFO -   {{ data_interval_start }}   → 구간 시작
+[2026-04-24 19:27:12] INFO -   {{ data_interval_end }}     → 구간 끝
+[2026-04-24 19:27:12] INFO - Done. Returned value was: None
