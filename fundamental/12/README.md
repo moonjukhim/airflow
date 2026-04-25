@@ -44,7 +44,39 @@
   GRANT ALL PRIVILEGES ON DATABASE airflow_db TO airflow_user;
   ```
 
+7. 외부 접속 허용
 
+```bash
+sudo nano /etc/postgresql/*/main/postgresql.conf
+```
+
+다음의 내용을 찾아서 수정
+
+```text
+listen_addresses = '*'
+```
+
+```bash
+sudo nano /etc/postgresql/*/main/pg_hba.conf
+```
+
+다음의 내용을 추가 
+
+```text
+host all all 0.0.0.0/0 md5
+```
+
+설정 후 재시작
+
+```bash
+sudo systemctl restart postgresql
+```
+
+재시작 후, 포트 확인
+
+```bash
+sudo netstat -ntlp | grep 5432
+```
 
 1. Plugin 설치
 
