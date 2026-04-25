@@ -32,3 +32,15 @@
 [Docker Container (Airflow)]
 ```
 
+4. Connection 정보
+
+```text
+Connection ID : conn_airflow
+Connection type : Postgres
+Desc : conn_airflow
+host : postgres
+login : postgres
+pwd : postgres
+port : 5432
+Database : postgres
+```
