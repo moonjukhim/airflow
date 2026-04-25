@@ -125,3 +125,31 @@ with DAG(
 
     [bad_example, good_example] >> idempotent_sql
     unreliable >> with_cleanup
+
+
+#########################################################
+# # Airflow Task에서 호출 예제
+# import requests
+# import uuid
+# 
+# def call_payment_api(**context):
+#     ds = context["logical_date"].format("YYYY-MM-DD")
+# 
+#     # 💡 핵심: deterministic key
+#     idempotency_key = f"payment_{ds}"
+# 
+#     payload = {
+#         "order_id": f"order_{ds}",
+#         "amount": 100
+#     }
+# 
+#     response = requests.post(
+#         "http://localhost:8000/payment",
+#         json=payload,
+#         headers={
+#             "Idempotency-Key": idempotency_key
+#         },
+#         timeout=5
+#     )
+# 
+#     print(response.json())
