@@ -1,82 +1,4 @@
-
-1. 패키지 목록 업데이트
-
-  ```bash
-  sudo apt update
-  ```
-
-2. PostgreSQL 설치
-
-  ```bash
-  sudo apt install postgresql postgresql-contrib -y
-  ```
-
-2. 서비스 상태 확인
-
-  ```bash
-  sudo systemctl status postgresql
-  # active (running)
-  ```
-
-3. PostgreSQL 접속
-
-  ```bash
-  sudo -i -u postgres
-  psql
-  ```
-
-4. 비밀번호 설정
-
-  ```sql
-  ALTER USER postgres PASSWORD 'your_password';
-  ```
-
-5. DB 생성
-
-  ```sql
-  CREATE DATABASE airflow_db;
-  ```
-
-6. 사용자 생성 & 권한 부여
-
-  ```sql
-  CREATE USER airflow_user WITH PASSWORD 'airflow123';
-  GRANT ALL PRIVILEGES ON DATABASE airflow_db TO airflow_user;
-  ```
-
-7. 외부 접속 허용
-
-```bash
-sudo nano /etc/postgresql/*/main/postgresql.conf
-```
-
-다음의 내용을 찾아서 수정
-
-```text
-listen_addresses = '*'
-```
-
-```bash
-sudo nano /etc/postgresql/*/main/pg_hba.conf
-```
-
-다음의 내용을 추가 
-
-```text
-host all all 0.0.0.0/0 md5
-```
-
-설정 후 재시작
-
-```bash
-sudo systemctl restart postgresql
-```
-
-재시작 후, 포트 확인
-
-```bash
-sudo netstat -ntlp | grep 5432
-```
+### 12. Hook & Connection
 
 1. Plugin 설치
 
@@ -92,4 +14,21 @@ sudo netstat -ntlp | grep 5432
   ```bash
   astro dev restart
   ```
+
+3. astro를 통해 실행하면 다음의 정보들을 확인할 수 있음
+
+```text
+✔ Project stopped
+✔ Project image has been updated
+✔ Project started
+➤ Airflow UI: http://airflow.localhost:6563
+➤ Postgres Database: postgresql://localhost:5432/postgres
+➤ The default Postgres DB credentials are: postgres:postgres
+```
+
+```text
+[내 PC (Host)]
+   ↓ 포트 매핑
+[Docker Container (Airflow)]
+```
 
