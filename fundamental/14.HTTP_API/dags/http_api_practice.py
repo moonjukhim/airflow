@@ -103,7 +103,7 @@ with DAG(
     # 방법 2: HttpOperator (Connection 기반)
     fetch_http = HttpOperator(
         task_id="fetch_posts_http_operator",
-        http_conn_id="jsonplaceholder",
+        http_conn_id="conn_http",
         endpoint="posts",
         method="GET",
         response_filter=_parse_posts,
