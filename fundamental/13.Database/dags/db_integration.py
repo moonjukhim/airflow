@@ -14,7 +14,7 @@ from airflow.providers.postgres.hooks.postgres import PostgresHook
 from airflow.providers.standard.operators.python import PythonOperator
 from airflow.sdk import DAG, task
 
-POSTGRES_CONN_ID = "exercise_db"
+POSTGRES_CONN_ID = "conn_airflow"
 LOCAL_TZ = "Asia/Seoul"
 SQL_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "include", "sql")
 
