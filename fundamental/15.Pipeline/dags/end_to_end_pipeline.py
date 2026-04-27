@@ -17,7 +17,8 @@ from airflow.providers.postgres.hooks.postgres import PostgresHook
 from airflow.providers.standard.operators.python import PythonOperator
 from airflow.sdk import DAG, task
 
-POSTGRES_CONN_ID = "exercise_db"
+POSTGRES_CONN_ID = "[MY_CONNECTION_ID]"
+# POSTGRES_CONN_ID = "conn_airflow"
 
 
 @task(task_id="setup_tables")
