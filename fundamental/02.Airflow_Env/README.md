@@ -1,6 +1,19 @@
 ### airflow 의 필요한 설정 부분
 
 ```bash
+sudo apt update
+sudo apt install -y openssh-server
+sudo systemctl enable --now ssh
+```
+
+```bash
+sudo ufw allow 22/tcp
+sudo ufw enable
+```
+
+1. 
+
+```bash
 # 시스템 업데이트
 sudo apt update && sudo apt upgrade -y
 
@@ -25,9 +38,6 @@ sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin d
 # sudo 없이 docker 사용
 sudo usermod -aG docker $USER
 newgrp docker
-
-# 동작 확인
-docker run hello-world
 ```
 
 ```bash
@@ -35,7 +45,7 @@ curl -sSL install.astronomer.io | sudo bash -s
 ```
 
 ```bash
-mkdir ~/my-airflow-project && cd ~/my-airflow-project
+mkdir ~/airflow && cd ~/airflow
 astro dev init
 ```
 
